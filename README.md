@@ -14,4 +14,4 @@ hash and a mnemonic.
 After a successful upload we got a message with an etag (some kind of hash) which can be used to download the file using the following command:
 `curl -i -X GET 'https://gateway.fairdatasociety.org/bzz/etag/'`
 
-Etag access for uploaded EEG recording: `...`
+Etag access for uploaded EEG recording: `c2edca62a74aa225a1c8933c26147c072966367059587936e9021564811b407`
