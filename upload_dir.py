@@ -13,9 +13,11 @@ def login(username, password):
         stdout, stderr = proc.communicate()
 
         print(stdout)
+        return True
     except Exception as e:
         print(stderr)
         print(e)
+        return False
 
 
 def get_files_from_dir(dir, fileType):
@@ -46,5 +48,5 @@ def get_files_from_dir(dir, fileType):
 
 
 if __name__ == "__main__":
-    login(sys.argv[1], sys.argv[2])
-    get_files_from_dir(sys.argv[3], sys.argv[4])
+    if (login(sys.argv[1], sys.argv[2])):
+        get_files_from_dir(sys.argv[3], sys.argv[4])
