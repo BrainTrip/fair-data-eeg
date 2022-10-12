@@ -27,7 +27,7 @@ def get_files_from_dir(dir, fileType):
     onlyfiles = [dir + '\\' + f for f in listdir(dir) if f.endswith(extension)]
     # remove double \\
     paths = [f.replace('\\', '/') for f in onlyfiles]
-    etag_list = [['file name', 'date', 'etag']]
+    etag_list = [['file name', 'timestamp', 'etag']]
     try:
         if len(paths) == 0:
             print("There isn't any file with extension: %s" %extension)
