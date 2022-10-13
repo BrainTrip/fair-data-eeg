@@ -38,6 +38,7 @@ def get_files_from_dir(dir, fileType):
                 proc = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
                 stdout, stderr = proc.communicate()
                 string = stdout.decode("utf-8")
+                print(string)
                 date = string[string.find('Date:')+6:string.find('Date:')+35]
                 etag = string[string.find('etag:')+7:string.find('etag:')+71]
                 name = fileNames[i]
