@@ -53,5 +53,5 @@ def get_files_from_dir(dir, fileType):
 
 
 if __name__ == "__main__":
-    if (login('brainTrip', 'CRAPEsEMstIC')):
-        get_files_from_dir("C:\\Users\\jakak\\Desktop\\Jaka\\BrainTrip\\BDIapp\\fair-data-eeg\\EEG_recordings", 'textFile/txt')
+    if (login(sys.argv[1], sys.argv[2])):
+        get_files_from_dir(sys.argv[3], sys.argv[4])
