@@ -45,5 +45,5 @@ folder, but the script will pick out only the ones with extension .zip)
 #### Example of script usage: 
 `python upload_dir.py username password C:\path\to\upload\folder eegRecording/zip`
 
-Table of our uploaded EEG recordings can be found here.
+Table of etags of uploaded EEG recordings can be found [here](https://github.com/BrainTrip/fair-data-eeg/tree/main/EEG_recordings).
 
