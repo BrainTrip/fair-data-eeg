@@ -47,3 +47,7 @@ folder, but the script will pick out only the ones with extension .zip)
 
 Table of etags of uploaded EEG recordings can be found [here](https://github.com/BrainTrip/fair-data-eeg/tree/main/EEG_recordings).
 
+## Additional notes
+
+During uploading of files we found out, that the actual upload is quite fast, but it usually takes 4-6 minutes to recieve a response with an etag.
+This method of upload is therefore not suitable for uploading big amounts of files.
