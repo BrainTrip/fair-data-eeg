@@ -3,6 +3,7 @@ import subprocess
 from os import listdir
 import csv
 from datetime import datetime
+import re
 
 def login(username, password):
     try:
@@ -11,8 +12,10 @@ def login(username, password):
 
         proc = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
         stdout, stderr = proc.communicate()
-
         print(stdout)
+        returnString = stdout.decode('utf-8')
+        if (returnString.find('200') == -1):
+            return False
         return True
     except Exception as e:
         print(stderr)
@@ -28,6 +31,7 @@ def get_files_from_dir(dir, fileType):
     # remove double \\
     paths = [f.replace('\\', '/') for f in onlyfiles]
     etag_list = [['file name', 'timestamp', 'etag']]
+    err_count = 0
     try:
         if len(paths) == 0:
             print("There isn't any file with extension: %s" %extension)
@@ -42,8 +46,16 @@ def get_files_from_dir(dir, fileType):
                 date = string[string.find('Date:')+6:string.find('Date:')+35]
                 etag = string[string.find('etag:')+7:string.find('etag:')+71]
                 name = fileNames[i]
-                etag_list.append([name, date, etag])
 
+                # check if the file was correctly uploaded and got an etag correct response
+                if len(etag) == 64 and bool(re.match("^[a-zA-Z0-9]*$", etag)):
+                    etag_list.append([name, date, etag])
+                else:
+                    err_count += 1
+
+                if err_count >= 5:
+                    print('There has been to many failed attempts at uploading a file.')
+                    sys.exit()
             # write etags to csv file
             fileName = type + '_etags_' + datetime.now().strftime('%Y-%m-%d_%H-%M-%S') + '.csv'
             with open(fileName, 'w', newline='') as etag:
