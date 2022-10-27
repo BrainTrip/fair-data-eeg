@@ -23,7 +23,9 @@ Further information on BrainVision format are available [here](https://www.brain
 
 ## Uploading/downloading a file using terminal window
 
-There is no requirements in order to upload or download files by using the bee gateway. However, if you are using it for the first time, you need to create a user using a command provided in ***list of commands***. Otherwise, you only need to log in by typing a login command in the terminal window. In order to upload a file you need to pass an upload command to a terminal window (shown below). A file can be 
+There is no requirements in order to upload or download files by using the bee gateway. However, if you are using it for the first time, you need to create a user using a command provided in ***list of commands***. Otherwise, you only need to log in by typing a login command in the terminal window. 
+#### Upload file
+In order to upload a file you need to pass an upload command to a terminal window (shown below). A file should consist a header file, marker file and raw eeg, archived using 7zip software to a .zip file.
 
 If the upload is successful you should get a response similar to this:
 
@@ -45,14 +47,15 @@ Access-Control-Allow-Headers: *
 
 The response consists of information about upload status, but the most important bit of information is the etag. This is a hash that was given to the uploaded file and is used in download command to access said file. 
 
-***Important !!!***
+### Important !!!
 
-In order for other people to be able to access uploaded files, the etag should also be made available in this repo. It would be best to upload a csv table containing three rows: file_name, timestamp, etag. The csv file should be named like this: 
+In order for other people to be able to access uploaded files, the etag should also be made available in this repo. It would be best to upload a csv table containing three rows: file name, timestamp, etag. The csv file should be named like this: 
 
 `fileType + '_etag_' + datetime.now().strftime('%Y-%m-%d_%H-%M-%S') + '.csv'`.
 
 Example: eegRecordings_etags_2022-10-04_10-23-24.csv
 
+#### Download a file
 To download a specific EEG recording, you need to log in and move to a desired directory via terminal window and execute a download command. The file should be downloaded in current directory under a specified name, which you write at the end of download command.
 
 ### List of commands:
@@ -75,18 +78,14 @@ To download a specific EEG recording, you need to log in and move to a desired d
 
 In order to upload files more easily, we wrote a simple upload script (`upload_dir.py`), which uploads specified type of files from the chosen directory to Swarm. 
 
-Firstly, you need to prepare the files, which are intended for upload and put them in a desired directory. The `upload_dir.py` script takes 4 arguments: 
+Firstly, you need to prepare the files, which are intended for upload and put them in a desired directory. Prepare the eeg recordings in BrainVision format (header file, marker file and raw EEG) and archive them using 7-zip software to a .zip file. Then run `upload_dir.py` script which takes 4 arguments: 
 - username,
 - password, 
-- path to the directory where the files are, 
+- path to the directory where the .zip files are, 
 - file type, which has the information what kind of files we want to upload and in which format (e.g. eegRecording/zip --> note: there can be other files in the 
 folder, but the script will pick out only the ones with extension .zip) 
 
-Then run `upload_dir.py` and if successful, the script will generate
-a csv table, named : "fileType_etag_timestamp". It has three columns; file name, timestamp, etag. The table is intended to give other users access to 
-uploaded files. 
-
-
+If the upload is successful, the script will generate a csv table, named by a formula: "fileType_etag_timestamp.csv". It has three columns; file name, timestamp, etag. The table is intended to give other users access to uploaded recordings. **The csv file should be uploaded to this repo in EEG_recordings folder.** 
 
 #### Example of upload script usage: 
 `python upload_dir.py username password C:\path\to\upload\folder eegRecording/zip`
