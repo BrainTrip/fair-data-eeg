@@ -1,6 +1,6 @@
 # fair-data-eeg
 ## Table of Contents
-- [Information about data format](#information-about-data-format)
+- [About Braintrip](#about-braintrip)
 - [Uploading/downloading a file using a terminal window](#uploading/downloading-a-file-using-a-terminal-window)
   - [List of Commands](#list-of-commands)
 - [Using the upload script](#using-the-upload-script)
@@ -9,17 +9,14 @@
   - [Example of download script usage](#example-of-download-script-usage)
 - [EEG recordings access](#eeg-recordings-access)
 - [Additional notes](#additional-notes)
-## Information about data format
 
-EEG recordings are in BrainVision format. The format consists of three separate files:
-- Header file (\*.vhdr)
-  This is a text file containing recording parameters and further meta-information. It has the same base name as the raw EEG data file.
-- Marker file (\*.vmrk)
-  This is a text file describing the events that have been collected during the EEG data recording. It has the same base name as the raw EEG data file.
-- Raw EEG data file (\*.eeg)
-  This is a binary file containing the EEG data as well as additional signals recorded along with the EEG.
+## About braintrip project
+
+The BrainTrip project is attempting to use quantitative analysis of EEG data to predict cognitive decline and dementia in seniors. We've performed several hundred EEG recordings using a 24-channel EEG amplifier and saline sponge based EEG caps. Our EEG data is encoded in the BrainVision format. Each EEG recoring has 3 associated files: a binary raw EEG file (.egg), and two ascii files containing marker (.vmrk) and header (.vhdr) information about special events in the EEG (markers) and channel names and positions (header). 
 
 Further information on BrainVision format are available [here](https://www.brainproducts.com/download/specification-of-brainvision-core-data-format-1-0/)
+
+To prepare your EEG data for upload, please convert your raw files to the BrainVison format for ease of use across different labs. Then follow the upload instructions.
 
 ## Uploading/downloading a file using terminal window
 
