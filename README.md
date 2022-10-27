@@ -1,51 +1,96 @@
 # fair-data-eeg
-Repository for FairData society and EEG data
+## Table of Contents
+- [Information about data format](#information-about-data-format)
+- [Uploading/downloading a file using a terminal window](#uploading/downloading-a-file-using-a-terminal-window)
+  - [List of Commands](#list-of-commands)
+- [Using the upload script](#using-the-upload-script)
+  - [Example of upload script usage](#example-of-upload-script-usage)
+- [Using the download script](#using-the-download-script)
+  - [Example of download script usage](#example-of-download-script-usage)
+- [EEG recordings access](#eeg-recordings-access)
+- [Additional notes](#additional-notes)
+## Information about data format
 
-This repository serves as a proof of work that  we (Braintrip) have done to achieve a certain milestone which was set and agreed upon by both parties.
+EEG recordings are in BrainVision format. The format consists of three separate files:
+- Header file (\*.vhdr)
+  This is a text file containing recording parameters and further meta-information. It has the same base name as the raw EEG data file.
+- Marker file (\*.vmrk)
+  This is a text file describing the events that have been collected during the EEG data recording. It has the same base name as the raw EEG data file.
+- Raw EEG data file (\*.eeg)
+  This is a binary file containing the EEG data as well as additional signals recorded along with the EEG.
 
-First we needed to familiarize ourselves with the whole principle of decentralized storage which includes using swarm and setting up a bee node in order to upload
-files. But because that proces is time consuming, we opted for using gateway method for uploading the EEG recordings. Secondly we tried uploading a single EEG 
-recording using said method, which was in BrainVision format. It consists of three files: eeg data file, header file and markers file. Files were archived in
-zip format.
+Further information on BrainVision format are available [here](https://www.brainproducts.com/download/specification-of-brainvision-core-data-format-1-0/)
 
-We used a FairOs gateway for uploading the EEG recording. The upload procedure is quite straightforward. In a terminal window we need to create a user,
-then sign in and at last upload an EEG recording. Commands used for said operations are listed below. When you successfully create a new user you get an address
-hash and a mnemonic.
+## Uploading/downloading a file using terminal window
 
-#### Creating a user:
+There is no requirements in order to upload or download files by using the bee gateway. However, if you are using it for the first time, you need to create a user using a command provided in ***list of commands***. Otherwise, you only need to log in by typing a login command in the terminal window. In order to upload a file you need to pass an upload command to a terminal window (shown below). A file can be 
 
-`curl 'https://fairosfairdatasociety.org/v1/user/signup' -H 'Content-Type: application/json' -d '{"user_name":"brainTrip","password":"verySafePassword"}'`
+If the upload is successful you should get a response similar to this:
 
-#### Login with created username and password: 
+```
+HTTP/1.1 201 Created
+Server: nginx
+Date: Thu, 27 Oct 2022 07:33:45 GMT
+Content-Type: application/json; charset=utf-8
+Content-Length: 82
+Connection: keep-alive
+x-powered-by: Express
+access-control-expose-headers: Swarm-Tag
+etag: "469948072a5b62f382911293888fe960cb1e18160941282348e6f321b2aa076e"
+swarm-tag: 567568429
+swarm-server-id: gw_bee_be1
+Access-Control-Allow-Methods: POST
+Access-Control-Allow-Headers: *
+```
 
-`curl 'https://fairos.fairdatasociety.org/v1/user/login' -H 'Content-Type: application/json' -d '{"user_name":"brainTrip","password":"verySafePassword"}'`
+The response consists of information about upload status, but the most important bit of information is the etag. This is a hash that was given to the uploaded file and is used in download command to access said file. 
 
-#### Upload command: 
+To download a specific EEG recording, you need to log in and move to a desired directory via terminal window and execute a download command. The file should be downloaded in current directory under a specified name, which you write at the end of download command.
 
-`curl -i -X POST -H "Content-Type:application/zip" -T "./testEEG.zip" 'https://gateway.fairdatasociety.org.bzz'`
+### List of commands:
+- #### Creating a user:
 
-After a successful upload we get a message with an etag (some kind of hash), which can be used to download the file using the following command:
-`curl -i -X GET 'https://gateway.fairdatasociety.org/bzz/insert_your_etag_between these_backslashes/'`
+  `curl 'https://fairosfairdatasociety.org/v1/user/signup' -H 'Content-Type: application/json' -d '{"user_name":"brainTrip","password":"verySafePassword"}'`
 
-Etag access for uploaded EEG recording: `c2edca62a74aa225a1c8933c26147c072966367059587936e9021564811b407`
+- #### Login with created username and password: 
 
-## Using the script for uploading
+  `curl 'https://fairos.fairdatasociety.org/v1/user/login' -H 'Content-Type: application/json' -d '{"user_name":"brainTrip","password":"verySafePassword"}'`
 
-Firstly prepare the files which you intend to upload and put them in a folder. Then run `upload_dir.py` and if successful, the script will generate
-a csv table, named : "fileType_etag_timestamp". It has three columns; file name, timestamp, etag. The table is intended to give other users access to 
-uploaded files. 
+- #### Upload command: 
 
-The `upload_dir.py` script takes 4 arguments: 
+  `curl -i -X POST -H "Content-Type: eegRecordings/zip" -T "./testEEG.zip" 'https://gateway.fairdatasociety.org.bzz'`
+  
+- #### Download command:
+  `curl -i -X GET 'https://gateway.fairdatasociety.org/bzz/insert_your_etag_between these_backslashes/' --output fileName.zip`
+
+## Using the upload script
+
+In order to upload files more easily, we wrote a simple upload script (`upload_dir.py`), which uploads specified type of files from the chosen directory to Swarm. 
+
+Firstly, you need to prepare the files, which are intended for upload and put them in a desired directory. The `upload_dir.py` script takes 4 arguments: 
 - username,
 - password, 
 - path to the directory where the files are, 
 - file type, which has the information what kind of files we want to upload and in which format (e.g. eegRecording/zip --> note: there can be other files in the 
-folder, but the script will pick out only the ones with extension .zip)
+folder, but the script will pick out only the ones with extension .zip) 
 
-#### Example of script usage: 
+Then run `upload_dir.py` and if successful, the script will generate
+a csv table, named : "fileType_etag_timestamp". It has three columns; file name, timestamp, etag. The table is intended to give other users access to 
+uploaded files. 
+
+
+
+#### Example of upload script usage: 
 `python upload_dir.py username password C:\path\to\upload\folder eegRecording/zip`
 
-Table of etags of uploaded EEG recordings can be found [here](https://github.com/BrainTrip/fair-data-eeg/tree/main/EEG_recordings).
+## Using the download script
+TODO: create a download script in the first place
+
+#### Example of download script usage:
+
+## EEG recordings access
+
+Tables of etags of uploaded EEG recordings can be found [here](https://github.com/BrainTrip/fair-data-eeg/tree/main/EEG_recordings).
 
 ## Additional notes
 
