@@ -45,6 +45,14 @@ Access-Control-Allow-Headers: *
 
 The response consists of information about upload status, but the most important bit of information is the etag. This is a hash that was given to the uploaded file and is used in download command to access said file. 
 
+***Important !!!***
+
+In order for other people to be able to access uploaded files, the etag should also be made available in this repo. It would be best to upload a csv table containing three rows: file_name, timestamp, etag. The csv file should be named like this: 
+
+`fileType + '_etag_' + datetime.now().strftime('%Y-%m-%d_%H-%M-%S') + '.csv'`.
+
+Example: eegRecordings_etags_2022-10-04_10-23-24.csv
+
 To download a specific EEG recording, you need to log in and move to a desired directory via terminal window and execute a download command. The file should be downloaded in current directory under a specified name, which you write at the end of download command.
 
 ### List of commands:
