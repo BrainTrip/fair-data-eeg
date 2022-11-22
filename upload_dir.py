@@ -7,7 +7,7 @@ import re
 
 def login(username, password):
     try:
-        command = 'curl "https://fairos.fairdatasociety.org/v1/user/login" -H "Content-Type: application/json" -d' \
+        command = 'curl "https://fairos.fairdatasociety.org/user/login" -H "Content-Type: application/json" -d' \
                   ' "{\\\"user_name\\\":\\\"' + username + '\\\",\\\"password\\\":\\\"' + password + '\\\"}"'
 
         proc = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
@@ -66,5 +66,4 @@ def get_files_from_dir(dir, fileType):
 
 
 if __name__ == "__main__":
-    if (login(sys.argv[1], sys.argv[2])):
-        get_files_from_dir(sys.argv[3], sys.argv[4])
+    get_files_from_dir(sys.argv[1], sys.argv[2])
