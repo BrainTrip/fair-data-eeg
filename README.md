@@ -75,9 +75,7 @@ To download a specific EEG recording, you need to log in and move to a desired d
 
 In order to upload files more easily, we wrote a simple upload script (`upload_dir.py`), which uploads specified type of files from the chosen directory to Swarm. 
 
-Firstly, you need to prepare the files, which are intended for upload and put them in a desired directory. Prepare the eeg recordings in BrainVision format (header file, marker file and raw EEG) and archive them using 7-zip software to a .zip file. Then run `upload_dir.py` script which takes 4 arguments: 
-- username,
-- password, 
+Firstly, you need to prepare the files, which are intended for upload and put them in a desired directory. Prepare the eeg recordings in BrainVision format (header file, marker file and raw EEG) and archive them using 7-zip software to a .zip file. Then run `upload_dir.py` script which takes 4 arguments:  
 - path to the directory where the .zip files are, 
 - file type, which has the information what kind of files we want to upload and in which format (e.g. eegRecording/zip --> note: there can be other files in the 
 folder, but the script will pick out only the ones with extension .zip) 
@@ -85,7 +83,7 @@ folder, but the script will pick out only the ones with extension .zip)
 If the upload is successful, the script will generate a csv table, named by a formula: "fileType_etag_timestamp.csv". It has three columns; file name, timestamp, etag. The table is intended to give other users access to uploaded recordings. **The csv file should be uploaded to this repo in EEG_recordings folder.** 
 
 #### Example of upload script usage: 
-`python upload_dir.py username password C:\path\to\upload\folder eegRecording/zip`
+`python upload_dir.py C:\path\to\upload\folder eegRecording/zip`
 
 ## Using the download script
 TODO: create a download script in the first place
@@ -98,5 +96,4 @@ Tables of etags of uploaded EEG recordings can be found [here](https://github.co
 
 ## Additional notes
 
-During uploading of files we found out, that the actual upload is quite fast, but it usually takes 4-6 minutes to recieve a response with an etag.
-This method of upload is therefore not suitable for uploading big amounts of files.
+You can also download the files using [this link.](https://gateway.fairdatasociety.org/)
