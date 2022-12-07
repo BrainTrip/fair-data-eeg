@@ -69,7 +69,7 @@ To download a specific EEG recording, you need to log in and move to a desired d
   `curl -i -X POST -H "Content-Type: eegRecordings/zip" -T "./testEEG.zip" 'https://gateway.fairdatasociety.org.bzz'`
   
 - #### Download command:
-  `curl -i -X GET 'https://gateway.fairdatasociety.org/bzz/insert_your_etag_between these_backslashes/' --output fileName.zip`
+  `curl -X GET 'https://gateway.fairdatasociety.org/bzz/insert_your_etag_between these_backslashes/' --output fileName.zip`
 
 ## Using the upload script
 
