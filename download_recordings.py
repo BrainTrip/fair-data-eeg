@@ -1,13 +1,16 @@
+#! /usr/bin/env python
+
 import sys
-import subprocess
-from os import listdir
+from clint.textui import progress
+from os import listdir, makedirs, path
 import pandas as pd
-from datetime import datetime
-import re
+import requests
 
 
-def download_files_from_csv(files='-af', index='-ai'):
-    # if user doesn't specify a file it is assumed that the whole folder will be downloaded
+def download_files_from_csv(target_dir='downloaded_EEGs', files='-af', index='-ai'):
+    if not path.isdir("./" + target_dir):
+        print('creating dir')
+        makedirs("./" + target_dir)
     if files == '-af':
         csvFiles = listdir('./EEG_recordings/')
     else:
@@ -21,20 +24,24 @@ def download_files_from_csv(files='-af', index='-ai'):
                 indexes = index.split(',')
                 indexes = [eval(i) for i in indexes]
             for ind in indexes:
-                command = 'curl -X GET "https://gateway.fairdatasociety.org/bzz/'
-                command += df['etag'][ind] + '/" -o ' + df['file name'][ind]
-                proc = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
-                stdout, stderr = proc.communicate()
+                url = "https://gateway.fairdatasociety.org/bzz/"
+                url += df['etag'][ind] + "/"
+
+                r = requests.get(url, stream=True)
+
+                with open("./downloaded_EEGs/" + df['file name'][ind], 'wb') as f:
+                    total_length = int(r.headers.get('decompressed-content-length'))
+                    print('downloading: ' + df['file name'][ind])
+                    for chunk in progress.bar(r.iter_content(chunk_size=1024), expected_size=(total_length / 1024) + 1):
+                        if chunk:
+                            f.write(chunk)
+                            f.flush()
         except Exception as e:
-            print('Arguments used were not correct, please check arguments instruction in readme file.')
+            print(e)
 
 
 if __name__ == "__main__":
-    param1, param2 = '-af', '-ai'
-    if len(sys.argv) > 2:
-        param1, param2 = sys.argv[1], sys.argv[2]
-    elif len(sys.argv) > 1:
-        param1 = sys.argv[1]
-
-    download_files_from_csv(param1, param2)
-
+    if len(sys.argv) == 4:
+        download_files_from_csv(sys.argv[1], sys.argv[2], sys.argv[3])
+    else:
+        print('Not enough parameters')
