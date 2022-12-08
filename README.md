@@ -86,9 +86,23 @@ If the upload is successful, the script will generate a csv table, named by a fo
 `python upload_dir.py C:\path\to\upload\folder eegRecording/zip`
 
 ## Using the download script
-TODO: create a download script in the first place
+If you haven't already it is advised to clone this repository for the download script to work properly. The download script takes three arguments:
+- folder name, which will be created if need be,
+- names of .csv tables separated with a comma or '-af' if you want to download from all of the tabels
+- indexes of rows of .csv tables separated with a comma or '-ai' fo you want to download all of the files in a table (if there is 10 files in a table, you can use indexes fromo 0 to 9).
+
+Below are some of the axamples of download script being used.
 
 #### Example of download script usage:
+
+- Download all of the currently uploaded 500 recordings: 
+`python download_recordings.py folder_name -af -ai`
+
+- Download from only two .csv tables:
+`python download_recordings.py new_folder eegRecording_etags_2022-11-22_13-08-25.csv,eegRecording_etags_2022-11-22_12-31-17.csv -ai`
+
+- Download only certain files from a certain table:
+`python download_recordings.py new_folder  eegRecording_etags_2022-11-22_13-08-25.csv 1,3,5`
 
 ## EEG recordings access
 
@@ -96,4 +110,4 @@ Tables of etags of uploaded EEG recordings can be found [here](https://github.co
 
 ## Additional notes
 
-You can also download the files using [this link.](https://gateway.fairdatasociety.org/)
+You can also download or upload the files to swarm via swarm gateway online using [this link.](https://gateway.fairdatasociety.org/) Please note, that if you download files from .csv tables via this link, they will be named after their hash. You can still use the download script to download recordings in bulk.
