@@ -7,7 +7,7 @@ import pandas as pd
 import requests
 
 
-def download_files_from_csv(target_dir='downloaded_EEGs', files='-af', index='-ai'):
+def download_files_from_csv(target_dir, files='-af', index='-ai'):
     if not path.isdir("./" + target_dir):
         print('creating dir')
         makedirs("./" + target_dir)
@@ -29,7 +29,7 @@ def download_files_from_csv(target_dir='downloaded_EEGs', files='-af', index='-a
 
                 r = requests.get(url, stream=True)
 
-                with open("./downloaded_EEGs/" + df['file name'][ind], 'wb') as f:
+                with open("./" + target_dir + "/" + df['file name'][ind], 'wb') as f:
                     total_length = int(r.headers.get('decompressed-content-length'))
                     print('downloading: ' + df['file name'][ind])
                     for chunk in progress.bar(r.iter_content(chunk_size=1024), expected_size=(total_length / 1024) + 1):
